@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PinterestButton {
   final void Function() onPressed;
@@ -8,6 +9,10 @@ class PinterestButton {
 }
 
 class PinterestMenu extends StatelessWidget {
+  final bool showMenu;
+
+  PinterestMenu({super.key, this.showMenu = true});
+
   final List<PinterestButton> items = [
     PinterestButton(
         onPressed: () {
@@ -31,11 +36,15 @@ class PinterestMenu extends StatelessWidget {
         icon: Icons.supervised_user_circle)
   ];
 
-  PinterestMenu({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return _PinterestmenuBackground(child: _MenuItems(items: items));
+    return ChangeNotifierProvider(
+        create: (_) => _MenuProvider(),
+        child: AnimatedOpacity(
+          duration: const Duration(milliseconds: 200),
+          opacity: showMenu ? 1 : 0,
+          child: _PinterestmenuBackground(child: _MenuItems(items: items)),
+        ));
   }
 }
 
@@ -55,7 +64,7 @@ class _PinterestmenuBackground extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(100),
-          boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 10, spreadRadius: -5)]),
+          boxShadow: const [BoxShadow(color: Colors.black38, blurRadius: 10, spreadRadius: -5)]),
       child: child,
     );
   }
@@ -78,16 +87,36 @@ class _MenuItems extends StatelessWidget {
 class _PinterestMenu extends StatelessWidget {
   final int index;
   final PinterestButton item;
+
+  final Color activeColor = Colors.black;
+  final Color inactiveColor = Colors.blueGrey;
+
   const _PinterestMenu(this.index, this.item);
 
   @override
   Widget build(BuildContext context) {
+    final selectedItem = Provider.of<_MenuProvider>(context).selectedItem;
+
     return GestureDetector(
-      onTap: item.onPressed,
+      onTap: () {
+        Provider.of<_MenuProvider>(context, listen: false).selectedItem = index;
+        item.onPressed();
+      },
       behavior: HitTestBehavior.translucent,
       child: Container(
-        child: Icon(item.icon, size: 25, color: Colors.blueGrey),
+        child: Icon(item.icon, size: (selectedItem == index) ? 35 : 25, color: (selectedItem == index) ? Colors.black : Colors.blueGrey),
       ),
     );
+  }
+}
+
+class _MenuProvider with ChangeNotifier {
+  int _selectedItem = 0;
+
+  int get selectedItem => _selectedItem;
+
+  set selectedItem(int index) {
+    _selectedItem = index;
+    notifyListeners();
   }
 }
