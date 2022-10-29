@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../widgets/radial_progress.dart';
+import '../providers/theme_changer_provider.dart';
 
 class CircularGraphicsPage extends StatefulWidget {
   const CircularGraphicsPage({super.key});
@@ -14,6 +16,7 @@ class _CircularGraphicsPageState extends State<CircularGraphicsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = Provider.of<ThemeChangerProvider>(context).currentTheme;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -33,7 +36,7 @@ class _CircularGraphicsPageState extends State<CircularGraphicsPage> {
         child: RadialProgress(
           percent: percent,
           strokeColor: Colors.pink,
-          backColor: Colors.black,
+          backColor: appTheme.textTheme.bodyText1!.color!,
           strokeWidth: 15,
           backWidth: 10,
         ),

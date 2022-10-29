@@ -132,10 +132,11 @@ class _SlideProvider with ChangeNotifier {
   double? _dotSize;
 
   _SlideProvider({Color? dotColor, Color? backgrounDotColor, double? selectedDotsize, double? dotSize}) {
-    this.dotColor = dotColor;
-    this.backgrounDotColor = backgrounDotColor;
-    this.selectedDotsize = selectedDotsize;
-    this.dotSize = dotSize;
+    _dotColor = dotColor;
+    _backgrounDotColor = backgrounDotColor;
+    _selectedDotsize = selectedDotsize;
+    _dotSize = dotSize;
+    notifyListeners();
   }
 
   double get currentPage => _currentPage;

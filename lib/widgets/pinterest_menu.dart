@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../src/providers/theme_changer_provider.dart';
+
 class PinterestButton {
   final void Function() onPressed;
   final IconData icon;
@@ -58,11 +60,12 @@ class _PinterestmenuBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = Provider.of<ThemeChangerProvider>(context);
     return Container(
       width: 250,
       height: 60,
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: appTheme.currentTheme.scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(100),
           boxShadow: const [BoxShadow(color: Colors.black38, blurRadius: 10, spreadRadius: -5)]),
       child: child,
@@ -96,6 +99,7 @@ class _PinterestMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedItem = Provider.of<_MenuProvider>(context).selectedItem;
+    final appTheme = Provider.of<ThemeChangerProvider>(context);
 
     return GestureDetector(
       onTap: () {
@@ -104,7 +108,8 @@ class _PinterestMenu extends StatelessWidget {
       },
       behavior: HitTestBehavior.translucent,
       child: Container(
-        child: Icon(item.icon, size: (selectedItem == index) ? 35 : 25, color: (selectedItem == index) ? Colors.black : Colors.blueGrey),
+        child: Icon(item.icon,
+            size: (selectedItem == index) ? 35 : 25, color: (selectedItem == index) ? appTheme.currentTheme.colorScheme.secondary : Colors.blueGrey),
       ),
     );
   }
