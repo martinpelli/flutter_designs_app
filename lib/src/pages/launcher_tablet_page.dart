@@ -1,15 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_designs_app/src/labs/slideshow_page.dart';
 import 'package:flutter_designs_app/src/providers/theme_changer_provider.dart';
 import 'package:flutter_designs_app/src/routes/routes.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-class LauncherPage extends StatelessWidget {
+import '../providers/layout_provider.dart';
+
+class LauncherTabletPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final appTheme = Provider.of<ThemeChangerProvider>(context);
+    final layoutProvider = Provider.of<LayoutProvider>(context);
     return Scaffold(
-      appBar: AppBar(title: Text('Flutter Designs - Phone')),
-      body: const _OptionsList(),
+      appBar: AppBar(title: Text('Flutter Designs - Tablet')),
+      body: Row(
+        children: [
+          SizedBox(
+            width: 300,
+            height: double.infinity,
+            child: const _OptionsList(),
+          ),
+          Container(width: 2, height: double.infinity, color: appTheme.darkTheme ? Colors.grey : appTheme.currentTheme.colorScheme.secondary),
+          Expanded(child: layoutProvider.currentPage)
+        ],
+      ),
       drawer: const _Main(),
     );
   }
@@ -34,7 +49,9 @@ class _OptionsList extends StatelessWidget {
                 color: appTheme.colorScheme.secondary,
               ),
               onTap: (() {
-                Navigator.push(context, MaterialPageRoute(builder: ((_) => pageRoutes[index].page)));
+                //Navigator.push(context, MaterialPageRoute(builder: ((_) => pageRoutes[index].page)));
+                final layoutProvider = Provider.of<LayoutProvider>(context, listen: false);
+                layoutProvider.currentPage = pageRoutes[index].page;
               }),
             )),
         separatorBuilder: ((context, index) => Divider(

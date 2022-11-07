@@ -45,14 +45,15 @@ class EmergencyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isLarge = MediaQuery.of(context).size.height > 550;
     return Scaffold(
         body: Stack(
       children: [
         Container(
-          margin: const EdgeInsets.only(top: 200),
-          child: ListView(physics: const BouncingScrollPhysics(), children: [const SizedBox(height: 80), ...items]),
+          margin: EdgeInsets.only(top: isLarge ? 220 : 10),
+          child: ListView(physics: const BouncingScrollPhysics(), children: [if (isLarge) const SizedBox(height: 80), ...items]),
         ),
-        const _PageHeader()
+        if (isLarge) const _PageHeader()
       ],
     ));
   }

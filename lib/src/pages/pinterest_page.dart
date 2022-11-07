@@ -26,11 +26,22 @@ class _PinterestMenuLocation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    double screenWidth = MediaQuery.of(context).size.width;
 
     final bool showMenu = Provider.of<_MenuProvider>(context).showMenu;
 
-    return Positioned(bottom: 30, child: SizedBox(width: screenWidth, child: Align(child: PinterestMenu(showMenu: showMenu))));
+    if (screenWidth > 500) screenWidth = screenWidth - 300;
+
+    return Positioned(
+        bottom: 30,
+        child: SizedBox(
+            width: screenWidth,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                PinterestMenu(showMenu: showMenu),
+              ],
+            )));
   }
 }
 
